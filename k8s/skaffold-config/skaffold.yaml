@@ -1,0 +1,35 @@
+apiVersion: skaffold/v2beta21
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/* #Where all the k8s files are located at the top of project
+metadata:
+  name: project-name-v0
+build:
+  #Cloud Configuration
+  #  googleCloudBuild:
+  #    projectId: google-cloud-project-id
+  #Local configuration
+  local:
+    push: false
+  tagPolicy:
+    sha256: {} #this  tag policy uses the tag latest of image
+  artifacts:
+    #    - image: gcr.io/google-cloud-project-id/image-name:latest
+    - image: org/project/service-1-name
+      context: service-1-name
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest: .
+    - image: org/project/service-2-name
+      context: service-2-name
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest: .
