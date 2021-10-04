@@ -1,0 +1,22 @@
+apiVersion: skaffold/v2beta23
+kind: Config
+metadata:
+  name: skeldon-dashboard-v3
+build:
+  artifacts:
+    - image: namespace/domain/servicename
+      context: <folder-where-dockerfile-is-located>
+      sync:
+        manual:
+          - src: src/**/*.js
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+  tagPolicy:
+    sha256: {}
+  local:
+    push: false
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*

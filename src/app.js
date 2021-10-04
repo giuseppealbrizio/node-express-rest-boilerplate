@@ -1,0 +1,198 @@
+import compression from 'compression';
+import MongoStore from 'connect-mongo';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import mongoSanitize from 'express-mongo-sanitize';
+import session from 'express-session';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import xss from 'xss-clean';
+
+/**
+ * Import: currentUser middleware for authentication.
+ */
+import { currentUser } from '@skeldon/sdv3-shared-library';
+
+/**
+ * Import custom logger function using winston
+ */
+import logger from './utils/logger.utils';
+
+/**
+ * Import: Database configuration
+ */
+import mongoDbConfig from './config/mongodb.config';
+
+/**
+ * Import: Error handlers
+ */
+import { NotFoundError } from './helpers/errors.helper';
+import errorHandler from './middlewares/errorHandler.middleware';
+
+/**
+ * Import: Routes
+ */
+import appRouter from './routes/v1/app.route';
+/**
+ * Documentation router
+ */
+import swaggerRouter from './routes/v1/swagger.route';
+/**
+ * Pub/Sub Listeners router
+ */
+import publisherRouter from './routes/v1/events/publisher.route';
+import subscriberRouter from './routes/v1/events/subscriber.route';
+
+/**
+ * Global env variables definition
+ */
+dotenv.config();
+
+/**
+ * Call the MongoDB connection based on the NODE_ENV setting
+ * and return info about db name
+ */
+if (process.env.NODE_ENV === 'production') {
+  mongoDbConfig.MongoDB().catch((err) => console.log(err));
+} else {
+  mongoDbConfig.MongoDBTest().catch((err) => console.log(err));
+}
+
+/**
+ * Define App
+ * @type {*|Express}
+ */
+const app = express();
+
+/**
+ * Trust Proxy
+ */
+app.set('trust proxy', true);
+
+/**
+ * Middleware definition
+ */
+app.use(morgan('combined', { stream: logger.stream }));
+
+/**
+ * Set security HTTP Headers
+ */
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
+
+/**
+ * Parse json request body
+ */
+app.use(express.json());
+
+/**
+ * Parse urlencoded request body
+ */
+app.use(express.urlencoded({ extended: true }));
+
+/**
+ * Sanitize data
+ */
+app.use(xss());
+app.use(mongoSanitize());
+
+/**
+ * GZIP compression
+ */
+app.use(compression());
+
+/**
+ * Parsing cookie
+ */
+app.use(cookieParser());
+
+/**
+ * Cookie policy definition
+ * @type {string|number}
+ */
+const DEFAULT_ENV = process.env.NODE_ENV || 'development';
+const COOKIE_MAX_AGE = process.env.COOKIE_MAX_AGE || 1000 * 60 * 60 * 24 * 30;
+const SECRET = process.env.JWT_KEY || 'SKELDON_JWT_SECRET';
+
+app.use(
+  session({
+    cookie: {
+      secure: DEFAULT_ENV === 'production',
+      maxAge: COOKIE_MAX_AGE,
+      httpOnly: true,
+      sameSite: 'lax',
+    },
+    secret: SECRET,
+    resave: false,
+    saveUninitialized: false,
+    /* Store session in mongodb */
+    store: MongoStore.create({
+      mongoUrl:
+        process.env.NODE_ENV === 'production'
+          ? process.env.MONGO_URI
+          : process.env.MONGO_URI_TEST,
+    }),
+  }),
+);
+
+/**
+ * Use the shared library middleware to know who is logged in
+ */
+app.use(currentUser);
+
+/**
+ * CORS policy configuration
+ */
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || '*', // allow CORS
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // allow session cookie from browser to pass through
+  }),
+);
+
+/**
+ * Headers configuration
+ */
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL); // Update to match the domain you will make the request from
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept',
+  );
+  next();
+});
+
+/**
+ * Routes definitions
+ */
+app.use('/api/v1/service', appRouter);
+
+/**
+ * Swagger Documentation endpoint
+ */
+app.use('/api/v1/service/documentation', swaggerRouter);
+
+/**
+ * Service Events Handlers
+ */
+app.use('/api/v1/service/publisher', publisherRouter);
+app.use('/api/v1/service/subscriber', subscriberRouter);
+
+/**
+ * This helper function is useful if we use express as a pure API endpoint
+ * Everytime you hit a route that doesn't exist it returns a json error 404
+ */
+// eslint-disable-next-line no-unused-vars
+app.all('*', (_, res) => {
+  throw new NotFoundError('Resource not found on this server');
+});
+
+app.use(errorHandler);
+
+export default app;

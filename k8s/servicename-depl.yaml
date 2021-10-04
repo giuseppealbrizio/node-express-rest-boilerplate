@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicename-depl
+  namespace: default
+  labels:
+    app: servicename
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicename
+  template:
+    metadata:
+      labels:
+        app: servicename
+    spec:
+      containers:
+        - name: servicename
+          #Cloud Configuration
+          #image: gcr.io/namespace/servicename:latest
+          #imagePullPolicy: Always
+          #ports:
+          #  - containerPort: 3000
+
+          #Local Configuration
+          image: namespace/version/servicename:latest
+
+          env:
+            - name: PORT
+              value: '3000'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: MONGO_URI
+              value: 'your_mongo_db_connection_string'
+            - name: GOOGLE_STORAGE_BUCKET_NAME
+              value: 'your_google_storage_bucket_name'
+            - name: GOOGLE_CLIENT_ID
+              value: 'your_google_client_id'
+            - name: GOOGLE_CLIENT_SECRET
+              value: 'your_google_client_secret'
+            - name: SENDGRID_API_KEY
+              value: 'your_sendgrid_api_key'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicename-srv
+spec:
+  type: ClusterIP
+  #type: NodePort
+  selector:
+    app: servicename
+  ports:
+    - name: servicename
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
