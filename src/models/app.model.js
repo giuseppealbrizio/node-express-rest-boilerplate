@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import validator from 'validator';
 import crypto from 'crypto';
 import { ApplicationError } from '../helpers/errors.helper';
+import { roles } from '../config/roles.config';
 
 dotenv.config();
 
@@ -57,11 +58,10 @@ const AppSchema = new Schema(
         refreshToken: String,
       },
     },
-    roleAccess: {
-      admin: { type: Boolean, default: false },
-      employee: { type: Boolean, default: false },
-      client: { type: Boolean, default: false },
-      vendor: { type: Boolean, default: false },
+    role: {
+      type: String,
+      enum: roles,
+      default: 'user',
     },
     active: {
       type: Boolean,
@@ -127,9 +127,8 @@ AppSchema.methods.generateVerificationToken = function () {
     {
       id: this._id,
       email: this.email,
-      // role: this.role,
+      role: this.role,
       active: this.active,
-      roleAccess: this.roleAccess,
     },
     jwtKey,
     {

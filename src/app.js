@@ -34,16 +34,7 @@ import errorHandler from './middlewares/errorHandler.middleware';
 /**
  * Import: Routes
  */
-import appRouter from './routes/v1/app.route';
-/**
- * Documentation router
- */
-import swaggerRouter from './routes/v1/swagger.route';
-/**
- * Pub/Sub Listeners router
- */
-import publisherRouter from './routes/v1/events/publisher.route';
-import subscriberRouter from './routes/v1/events/subscriber.route';
+import v1Routes from './routes/v1/index.route';
 
 /**
  * Global env variables definition
@@ -171,18 +162,7 @@ app.use((req, res, next) => {
 /**
  * Routes definitions
  */
-app.use('/api/v1/service', appRouter);
-
-/**
- * Swagger Documentation endpoint
- */
-app.use('/api/v1/service/documentation', swaggerRouter);
-
-/**
- * Service Events Handlers
- */
-app.use('/api/v1/service/publisher', publisherRouter);
-app.use('/api/v1/service/subscriber', subscriberRouter);
+app.use('/api/v1', v1Routes);
 
 /**
  * This helper function is useful if we use express as a pure API endpoint
