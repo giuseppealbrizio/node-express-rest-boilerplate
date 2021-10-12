@@ -8,6 +8,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import session from 'express-session';
 import helmet from 'helmet';
 import morgan from 'morgan';
+// import path from 'path';
 import xss from 'xss-clean';
 
 /**
@@ -172,6 +173,14 @@ app.use('/api/v1', v1Routes);
 app.all('*', (_, res) => {
   throw new NotFoundError('Resource not found on this server');
 });
+
+/**
+ * Catchall middleware. Activate to serve every route in
+ * the public directory i.e. if we have a build of React
+ */
+// app.use((req, res) =>
+//   res.sendFile(path.resolve(path.join(__dirname, '../public/index.html'))),
+// );
 
 app.use(errorHandler);
 
