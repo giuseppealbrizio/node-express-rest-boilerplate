@@ -1,9 +1,10 @@
-import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import validator from 'validator';
 import crypto from 'crypto';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+import mongoose, { Schema } from 'mongoose';
+import mongooseDelete from 'mongoose-delete';
+import validator from 'validator';
 import { ApplicationError } from '../helpers/errors.helper';
 import { roles } from '../config/roles.config';
 
@@ -93,6 +94,8 @@ const AppSchema = new Schema(
     },
   },
 );
+
+AppSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
 
 AppSchema.index({ username: 1, email: 1, googleId: 1 });
 

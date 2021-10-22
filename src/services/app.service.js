@@ -1,5 +1,6 @@
 import cleanDeep from 'clean-deep';
 import { ApplicationError } from '../helpers/errors.helper';
+import App from '../models/app.model';
 
 export default {
   findAll: async (filter) => {
@@ -15,6 +16,15 @@ export default {
   },
   findOneAndUpdate: async (id, body) => {
     return `This service should update ${id} resource with this body ${body}`;
+  },
+  findOneAndSoftDelete: async (id) => {
+    const app = await App.findOne({ id });
+
+    if (app) {
+      await app.delete();
+    }
+
+    return `The object is soft deleted ${app}`;
   },
   findOneAndDelete: async (id) => {
     return `This service should delete ${id} resource `;

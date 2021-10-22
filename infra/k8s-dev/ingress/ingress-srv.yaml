@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    #Local configuration - Remember to install nginx
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  rules:
+    - host: domainname.eu.ngrok.io
+      http:
+        paths:
+          - path: /api/v1/route1/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: servicename-srv
+                port:
+                  number: 3000
+
+          - path: /api/v1/route2/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: servicename2-srv
+                port:
+                  number: 3000
