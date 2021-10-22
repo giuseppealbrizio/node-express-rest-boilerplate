@@ -1,0 +1,32 @@
+apiVersion: skaffold/v2beta24
+kind: Config
+metadata:
+  name: project-id
+build:
+  artifacts:
+    #Local configuration
+    - image: org/project/servicename
+      context: service-folder #folder where codebase is stored
+      sync:
+        manual:
+          - src: src/**/*.js
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: org/project/servicename2
+      context: service2-folder
+      sync:
+        manual:
+          - src: src/**/*.js
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+  tagPolicy:
+    sha256: {} #this  tag policy uses the tag latest of image
+  #Local configuration
+  local:
+    push: false
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s-dev/* #Where all the k8s for files are located at the top of project

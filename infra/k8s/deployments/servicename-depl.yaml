@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicename-depl
+  namespace: default
+  labels:
+    app: servicename
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicename
+  template:
+    metadata:
+      labels:
+        app: servicename
+    spec:
+      volumes:
+        - name: google-cloud-keys
+          secret:
+            secretName: google-application-credentials
+      containers:
+        - name: servicename
+          #Cloud Configuration
+          image: gcr.io/project-id/servicename:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: google-cloud-keys
+              mountPath: /var/secrets/google
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: '3000'
+            - name: HASH
+              value: 'your_numeric_value'
+            - name: MONGO_URI
+              value: 'your_mongo_db_connection_string'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: JWT_KEY
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/var/secrets/google/google-application-credentials.json"
+            - name: GOOGLE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: GOOGLE_PROJECT_ID
+            - name: GOOGLE_STORAGE_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: GOOGLE_STORAGE_BUCKET_NAME
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: GOOGLE_CLIENT_SECRET
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: SENDGRID_API_KEY
+            - name: SENDGRID_SENDER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: SENDGRID_SENDER_EMAIL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicename-srv
+spec:
+  type: NodePort
+  selector:
+    app: servicename
+  ports:
+    - name: servicename
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
