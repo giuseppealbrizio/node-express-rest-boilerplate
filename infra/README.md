@@ -2,6 +2,8 @@
 
 This folder should be moved to the root folder where all the services are located.
 
+Replace all the key-value pairs with yours
+
 - `k8s` folder contains all production kubernetes manifests
 - `k8s-dev` folder contains all development kubernetes manifests to run with skaffold
 - `scripts` folder contains all script related to the creation of a cluster or running skaffold or secret creation
