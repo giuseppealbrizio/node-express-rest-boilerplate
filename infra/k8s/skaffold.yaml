@@ -5,7 +5,7 @@ metadata:
 build:
   artifacts:
     #Cloud configuration
-    - image: gcr.io/project-id/servicename
+    - image: eu.gcr.io/project-id/servicename
       context: service-folder #folder where codebase is stored
       sync:
         manual:
@@ -13,7 +13,7 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
-    - image: gcr.io/project-id/servicename2
+    - image: eu.gcr.io/project-id/servicename2
       context: service2-folder
       sync:
         manual:

@@ -10,22 +10,22 @@ const router = express.Router();
 
 const defaultRoutes = [
   {
-    path: '/service-name',
+    path: '/',
     route: appRoutes,
   },
   {
-    path: '/service-name/publisher',
+    path: '/publisher',
     route: publisherRoutes,
   },
   {
-    path: '/service-name/subscriber',
+    path: '/subscriber',
     route: subscriberRoutes,
   },
 ];
 
 const devRoutes = [
   {
-    path: '/service-name/documentation',
+    path: '/documentation',
     route: swaggerRoutes,
   },
 ];

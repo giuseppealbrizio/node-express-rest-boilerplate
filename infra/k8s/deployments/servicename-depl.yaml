@@ -22,7 +22,7 @@ spec:
       containers:
         - name: servicename
           #Cloud Configuration
-          image: gcr.io/project-id/servicename:latest
+          image: eu.gcr.io/project-id/servicename:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: google-cloud-keys
@@ -42,7 +42,7 @@ spec:
                   name: shared-secrets
                   key: JWT_KEY
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: "/var/secrets/google/google-application-credentials.json"
+              value: '/var/secrets/google/google-application-credentials.json'
             - name: GOOGLE_PROJECT_ID
               valueFrom:
                 secretKeyRef:

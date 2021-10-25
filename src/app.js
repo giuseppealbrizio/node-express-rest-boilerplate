@@ -163,7 +163,7 @@ app.use((req, res, next) => {
 /**
  * Routes definitions
  */
-app.use('/api/v1', v1Routes);
+app.use('/api/v1/servicename', v1Routes);
 
 /**
  * This helper function is useful if we use express as a pure API endpoint
