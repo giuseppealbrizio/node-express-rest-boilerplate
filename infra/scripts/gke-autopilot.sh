@@ -10,7 +10,7 @@ echo -e "\e[0;33mAutomate GKE Autopilot Cluster creation.\e[0m"
 # To execute the script
 #chmod +x gke-autopilot.sh && ./gke-autopilot.sh
 
-gcloud config set project google-cloud-project-id
+gcloud config set project <google-cloud-project-id>
 
 PROJECT_NAME=$(gcloud config get-value project)
 REGION=europe-west1

@@ -1,8 +1,10 @@
-# Microservice Template
+# Express Microservice Template
 
-Following features are enabled
+This template is intended to be used as single service in a multi-service application
 
-- `ECMA` features enabled
+The application uses express as framework and is configured with the following features:
+
+- `ECMA2020` features enabled
 - `Dotenv` Load environment variables from .env file
 - `Eslint` Code quality tool
 - `Prettier` to prettify the code
@@ -64,6 +66,14 @@ Following features are enabled
 
 ## Folder Structure
 
+> `infra/`
+>
+> - **For more information about the k8s configu please read the README file**
+> - **`k8s`** - folder contains all production kubernetes manifests
+> - **`k8s-dev`** - folder contains all development kubernetes manifests to run with skaffold
+> - **`scripts`** - older contains all script related to the creation of a cluster or running skaffold or secret
+>   creation
+>
 > `src/`
 >
 > - **`bin/`** - server configuration folder
