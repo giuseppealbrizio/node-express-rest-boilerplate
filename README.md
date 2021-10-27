@@ -6,7 +6,7 @@ message broker
 The main difference with the previous template is the folder infra in which you can find all the GKE configurations to
 use in local with Skaffold and in cloud with GKE
 
-To know more about how to implement GKE and Skaffold please refer to this folder:
+To know more about how to implement GKE and run with Skaffold please refer to this folder:
 
 `./infra`
 
@@ -29,6 +29,7 @@ The application uses express as framework and is configured with the following f
 - `Axios` globally configured in `./src/utils/api.utils.js`
 - `Swagger` documentation reachable at `http://localhost:3000/api/v1/docs`
 - `Jest` Testing tool support
+- `Logger` Logging support with Winston
 - `Docker` ready configuration with multi-stage option
 - `Best practices` in naming files
 
