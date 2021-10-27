@@ -29,7 +29,7 @@ import mongoDbConfig from './config/mongodb.config';
 /**
  * Import: Error handlers
  */
-import { NotFoundError } from './errors/old/errors.helper';
+import { NotFoundError } from './errors';
 import errorHandler from './middlewares/errorHandler.middleware';
 
 /**
