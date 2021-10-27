@@ -1,5 +1,5 @@
 import cleanDeep from 'clean-deep';
-import { ApplicationError } from '../helpers/errors.helper';
+import { ApplicationError } from '../errors/old/errors.helper';
 import App from '../models/app.model';
 
 export default {

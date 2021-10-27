@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import mongoose, { Schema } from 'mongoose';
 import mongooseDelete from 'mongoose-delete';
 import validator from 'validator';
-import { ApplicationError } from '../helpers/errors.helper';
+import { ApplicationError } from '../errors/old/errors.helper';
 import { roles } from '../config/roles.config';
 
 dotenv.config();

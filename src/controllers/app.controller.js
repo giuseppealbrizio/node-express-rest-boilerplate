@@ -1,6 +1,6 @@
 import debug from 'debug';
 import { composeObject } from '@skeldon/sdv3-shared-library';
-import { ApplicationError, NotFoundError } from '../helpers/errors.helper';
+import { ApplicationError } from '../errors';
 import appService from '../services/app.service';
 
 const DEBUG = debug('dev');
@@ -19,7 +19,9 @@ export default {
       });
     } catch (error) {
       DEBUG(error);
-      throw new ApplicationError(500, error);
+      if (error instanceof ApplicationError) {
+        throw new ApplicationError(500, error);
+      }
     }
   },
   getOne: async (req, res) => {
@@ -33,7 +35,9 @@ export default {
       });
     } catch (error) {
       DEBUG(error);
-      throw new NotFoundError(error.message);
+      if (error instanceof ApplicationError) {
+        throw new ApplicationError(500, error);
+      }
     }
   },
   update: async (req, res) => {
@@ -47,7 +51,9 @@ export default {
       });
     } catch (error) {
       DEBUG(error);
-      throw new ApplicationError(500, error);
+      if (error instanceof ApplicationError) {
+        throw new ApplicationError(500, error);
+      }
     }
   },
   deleteOne: async (req, res) => {
@@ -61,7 +67,9 @@ export default {
       });
     } catch (error) {
       DEBUG(error);
-      throw new ApplicationError(500, error);
+      if (error instanceof ApplicationError) {
+        throw new ApplicationError(500, error);
+      }
     }
   },
 };

@@ -1,5 +1,5 @@
 import { roleRights } from '../config/roles.config';
-import { ApplicationError } from '../helpers/errors.helper';
+import { ApplicationError } from '../errors/old/errors.helper';
 
 export const verifyRights =
   (...requiredRights) =>

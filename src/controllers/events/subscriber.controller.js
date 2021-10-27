@@ -1,6 +1,6 @@
 import { PubSub } from '@google-cloud/pubsub';
 import debug from 'debug';
-import { ApplicationError } from '../../helpers/errors.helper';
+import { ApplicationError } from '../../errors';
 
 const DEBUG = debug('dev');
 

@@ -1,4 +1,4 @@
-import { ApplicationError } from '../../helpers/errors.helper';
+import { ApplicationError } from '../../errors';
 
 // eslint-disable-next-line import/prefer-default-export
 export const requireAuth = (req, res, next) => {

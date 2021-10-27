@@ -1,5 +1,5 @@
 import MailService from '@sendgrid/mail';
-import { ApplicationError } from '../../helpers/errors.helper';
+import { ApplicationError } from '../../errors';
 
 export default {
   sendTestEmail: async () => {
