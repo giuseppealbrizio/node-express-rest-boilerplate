@@ -19,7 +19,7 @@ import { currentUser } from '@skeldon/sdv3-shared-library';
 /**
  * Import custom logger function using winston
  */
-import logger from './utils/logger.utils';
+import { stream } from './utils/logger.utils';
 
 /**
  * Import: Database configuration
@@ -66,7 +66,7 @@ app.set('trust proxy', true);
 /**
  * Middleware definition
  */
-app.use(morgan('combined', { stream: logger.stream }));
+app.use(morgan('combined', { stream }));
 
 /**
  * Set security HTTP Headers
