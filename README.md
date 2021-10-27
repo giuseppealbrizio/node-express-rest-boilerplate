@@ -1,6 +1,14 @@
 # Express Microservice Template
 
-This template is intended to be used as single service in a multi-service application
+This template is intended to be used as single service in a REST multi-service application using Cloud Pub/Sub as
+message broker
+
+The main difference with the previous template is the folder infra in which you can find all the GKE configurations to
+use in local with Skaffold and in cloud with GKE
+
+To know more about how to implement GKE and Skaffold please refer to this folder:
+
+`./infra`
 
 The application uses express as framework and is configured with the following features:
 
@@ -68,7 +76,7 @@ The application uses express as framework and is configured with the following f
 
 > `infra/`
 >
-> - **For more information about the k8s configu please read the README file**
+> - **For more information about the k8s configuration please check the README file**
 > - **`k8s`** - folder contains all production kubernetes manifests
 > - **`k8s-dev`** - folder contains all development kubernetes manifests to run with skaffold
 > - **`scripts`** - older contains all script related to the creation of a cluster or running skaffold or secret
