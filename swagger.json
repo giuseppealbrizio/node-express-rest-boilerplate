@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Skeldon Dashboard V3 - Microservice Template",
-    "description": "Documentation for microservice template used for Skeldon Dashboard V3",
-    "termsOfService": "https://github.com/giuseppealbrizio/express-ecma-boilerplate-mongodb-with-authentication",
+    "title": "Express Microservice Template",
+    "description": "Documentation for microservice template",
+    "termsOfService": "https://github.com/giuseppealbrizio/express-microservice-template",
     "contact": {
       "email": "giuseppe@skeldon.it"
     },
@@ -28,7 +28,7 @@
   "tags": [
     {
       "name": "App",
-      "description": "Upload routes"
+      "description": "App routes"
     }
   ],
   "paths": {
