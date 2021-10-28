@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { composeObject } from '@skeldon/sdv3-shared-library';
+import _ from 'lodash';
 import { ApplicationError } from '../errors';
 import appService from '../services/app.service';
 
@@ -8,7 +8,7 @@ const DEBUG = debug('dev');
 export default {
   getAll: async (req, res) => {
     try {
-      const filter = composeObject(req.query, ['q']);
+      const filter = _.pick(req.query, ['q']);
 
       const resource = appService.findAll(filter);
 
