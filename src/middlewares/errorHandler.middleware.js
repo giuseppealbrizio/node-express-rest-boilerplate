@@ -24,9 +24,11 @@ export default (err, request, response, next) => {
 
   return response.status(err.statusCode || 500).json({
     status: 'error',
+    statusCode: err.statusCode,
+    message: err.message,
     error: {
       message: err.message,
-      ...(err.errors && { errors: err.errors }),
+      // ...(err.errors && { errors: err.errors }), // Only if we pass errors to the class ApplicationError
       ...(!isProduction && { trace: errorMessage }),
     },
   });
