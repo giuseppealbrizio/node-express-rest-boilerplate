@@ -1,7 +1,7 @@
 import express from 'express';
 import _ from 'lodash';
 
-import appRoutes from 'app.route';
+import appRoutes from './app.route';
 import publisherRoutes from './events/publisher.route';
 import subscriberRoutes from './events/subscriber.route';
 import swaggerRoutes from './swagger.route';

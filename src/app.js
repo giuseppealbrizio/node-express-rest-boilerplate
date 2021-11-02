@@ -161,9 +161,28 @@ app.use((req, res, next) => {
 });
 
 /**
+ * This MIDDLEWARE is to serve the public client build and redirect everything
+ * to the client index.html. Replace the original one with public. Move build
+ * inside the server folder and activate also the catchall middleware.
+ */
+// app.use(
+//   express.static(path.join(__dirname, '../public'), {
+//     index: 'index.html',
+//   }),
+// );
+
+/**
  * Routes definitions
  */
 app.use('/api/v1/servicename', v1Routes);
+
+/**
+ * Catchall middleware. Activate to serve every route in
+ * the public directory i.e. if we have a build of React
+ */
+// app.use((req, res) =>
+//   res.sendFile(path.resolve(path.join(__dirname, '../public/index.html'))),
+// );
 
 /**
  * This helper function is useful if we use express as a pure API endpoint
@@ -173,14 +192,6 @@ app.use('/api/v1/servicename', v1Routes);
 app.all('*', (_, res) => {
   throw new NotFoundError('Resource not found on this server');
 });
-
-/**
- * Catchall middleware. Activate to serve every route in
- * the public directory i.e. if we have a build of React
- */
-// app.use((req, res) =>
-//   res.sendFile(path.resolve(path.join(__dirname, '../public/index.html'))),
-// );
 
 app.use(errorHandler);
 
