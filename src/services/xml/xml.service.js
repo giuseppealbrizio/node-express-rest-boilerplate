@@ -40,7 +40,8 @@ export default {
    * @param permitId
    * @return {Promise<string>}
    */
-  createXmlFromAnArray: async () => {
+  createXmlFromAnArray: async (arrayObject) => {
+    // This should be the arrayObject passed
     const array = [
       {
         field1: '12345',
