@@ -3,9 +3,9 @@ import _ from 'lodash';
 
 export default {
   /**
-   * Create an xml starting from permit
-   * @return {Promise<void>}
+   * Create an xml starting from a single object
    * @param object
+   * @returns {Promise<string>}
    */
   createXmlFromObject: async (object) => {
     const { start, end } = object;
@@ -36,26 +36,26 @@ export default {
     }
   },
   /**
-   * Create an xml iterating over an array of permits
-   * @param permitId
+   * Create an xml iterating over an array of objects
    * @return {Promise<string>}
+   * @param arrayObject
    */
   createXmlFromAnArray: async (arrayObject) => {
     // This should be the arrayObject passed
-    const array = [
-      {
-        field1: '12345',
-        field2: 'ASDFG',
-      },
-      {
-        field1: '67890',
-        field2: 'QWERTY',
-      },
-      {
-        field1: '192837',
-        field2: 'ZXCVB',
-      },
-    ];
+    // const arrayExample = [
+    //   {
+    //     field1: '12345',
+    //     field2: 'ASDFG',
+    //   },
+    //   {
+    //     field1: '67890',
+    //     field2: 'QWERTY',
+    //   },
+    //   {
+    //     field1: '192837',
+    //     field2: 'ZXCVB',
+    //   },
+    // ];
 
     const doc = create({ version: '1.0', encoding: 'UTF-8' })
       // .ele('root', { att: 'val' })
@@ -70,7 +70,7 @@ export default {
 
     doc.com('Iterator over array');
 
-    _.forEach(array, (value, key) => {
+    _.forEach(arrayObject, (value, key) => {
       doc
         .ele(`field${key + 1}`)
         .txt(value.field2)
