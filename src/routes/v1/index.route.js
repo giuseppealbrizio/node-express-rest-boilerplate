@@ -8,9 +8,17 @@ import swaggerRoutes from './swagger.route';
 
 const router = express.Router();
 
+// Healthy check endpoint
+router.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Healthy check completed successfully',
+  });
+});
+
 const defaultRoutes = [
   {
-    path: '/',
+    path: '/app',
     route: appRoutes,
   },
   {
