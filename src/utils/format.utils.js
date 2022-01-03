@@ -5,15 +5,6 @@ import { toNumber } from 'lodash';
 // const PRICE = '1000.00';
 
 /**
- * This function format date to IT locale
- * @param date
- * @return {string}
- */
-export const formatDateToItLocale = (date) => {
-  return new Intl.DateTimeFormat('it-IT').format(date);
-};
-
-/**
  * This function format a value and return currency formatting
  * @param value
  * @return {string}
@@ -42,30 +33,6 @@ export const formatValueToNumber = (value) => {
  */
 export const formatValueToFixed = (value) => {
   return parseFloat(value).toFixed(2);
-};
-
-/**
- * This function return the days between two dates
- * @param date1
- * @param date2
- * @return {number}
- */
-export const calculateDays = (date1, date2) => {
-  const oneDay = 24 * 60 * 60 * 1000;
-
-  const startDate = new Date(date1);
-  const endDate = new Date(date2);
-  return Math.round(Math.abs(startDate - endDate) / oneDay) + 1;
-};
-
-/**
- * This function remove duplicates from an array
- * @param array
- * @return {*}
- */
-export const removeDuplicates = (array) => {
-  array.splice(0, array.length, ...new Set(array));
-  return array;
 };
 
 // const examples = {
