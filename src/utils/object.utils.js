@@ -47,6 +47,13 @@ export const cleanObjectWithRecursion = (obj) => {
 };
 
 /**
+ * Checks if an object is empty (returns boolean)
+ * @param obj
+ * @returns {boolean}
+ */
+export const isObjEmpty = (obj) => Object.keys(obj).length === 0;
+
+/**
  * ES2019 Style
  */
 

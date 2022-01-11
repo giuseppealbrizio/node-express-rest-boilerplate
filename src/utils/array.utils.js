@@ -54,6 +54,16 @@ export const checkElementsBetweenArray = (array1, array2) => {
 };
 
 /**
+ * This function return an array filtered of the results in the second array
+ * @param array1
+ * @param array2
+ * @returns array
+ */
+export const getFilteredArray = (array1, array2) => {
+  return array1.filter((element) => !array2.includes(element));
+};
+
+/**
  * This function remove duplicates from an array
  * @param array
  * @return {*}
