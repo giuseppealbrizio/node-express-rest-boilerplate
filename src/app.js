@@ -74,6 +74,7 @@ app.use(morgan('combined', { stream }));
 app.use(
   helmet({
     contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false, // set this false to prevent bug in new browser
   }),
 );
 
