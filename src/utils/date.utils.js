@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 /**
  * Return an array of dates passing two dates
  * @param startDate
@@ -7,6 +9,10 @@
 export const getDatesBetweenDates = (startDate, endDate) => {
   let dates = [];
 
+  if (!startDate || !endDate) {
+    return dates;
+  }
+
   // to avoid modifying the original date
   const currentDate = new Date(startDate);
 
@@ -14,7 +20,7 @@ export const getDatesBetweenDates = (startDate, endDate) => {
     dates = [...dates, new Date(currentDate)];
     currentDate.setDate(currentDate.getDate() + 1);
   }
-  dates = [...dates, endDate];
+  dates = [...dates, new Date(endDate)];
   return dates;
 };
 
@@ -68,4 +74,18 @@ export const isToday = (date) => {
     date.getFullYear() === today.getFullYear()
     /* eslint-enable */
   );
+};
+
+/**
+ * Get Formatted Date
+ * @param date
+ * @param format
+ * @returns {string}
+ */
+export const getFormattedDate = (date, format = 'YYYY-MM-DD') => {
+  if (moment(date, 'YYYY-MM-DD').isValid()) {
+    return moment(date).format(format);
+  }
+
+  return '';
 };

@@ -73,6 +73,7 @@
     "helmet": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "mongodb": "^4.3.0",
     "mongoose": "^6.1.6",
     "mongoose-delete": "^0.5.4",
