@@ -89,3 +89,15 @@ export const getFormattedDate = (date, format = 'YYYY-MM-DD') => {
 
   return '';
 };
+
+/**
+ * Get how many months between two dates
+ * @param date1
+ * @param date2
+ * @returns {number}
+ */
+export const getMonthsDifference = (date1, date2) => {
+  const startDate = new Date(date1);
+  const endDate = new Date(date2);
+  return Math.round(Math.abs(startDate - endDate) / (1000 * 60 * 60 * 24 * 30));
+};
