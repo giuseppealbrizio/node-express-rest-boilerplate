@@ -70,6 +70,21 @@ spec:
                 secretKeyRef:
                   name: shared-secrets
                   key: SENDGRID_SENDER_EMAIL
+            - name: TWILIO_ACCOUNT_SID
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: TWILIO_ACCOUNT_SID
+            - name: TWILIO_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: TWILIO_AUTH_TOKEN
+            - name: TWILIO_PHONE_NUMBER
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: TWILIO_PHONE_NUMBER
 ---
 apiVersion: v1
 kind: Service
