@@ -8,7 +8,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import session from 'express-session';
 import helmet from 'helmet';
 import morgan from 'morgan';
-// import path from 'path';
+import passport from 'passport';
 import xss from 'xss-clean';
 
 /**
@@ -109,8 +109,8 @@ app.use(cookieParser());
  * @type {string|number}
  */
 const DEFAULT_ENV = process.env.NODE_ENV || 'development';
-const COOKIE_MAX_AGE = process.env.COOKIE_MAX_AGE || 1000 * 60 * 60 * 24 * 30;
-const SECRET = process.env.JWT_KEY || 'SKELDON_JWT_SECRET';
+const COOKIE_MAX_AGE = process.env.COOKIE_MAX_AGE || 1000 * 60 * 60 * 24;
+const SECRET = process.env.JWT_KEY || 'your_jwt_secret';
 
 app.use(
   session({
@@ -125,11 +125,13 @@ app.use(
     saveUninitialized: false,
     /* Store session in mongodb */
     store: MongoStore.create({
+      autoRemove: 'native', // Default
       mongoUrl:
         process.env.NODE_ENV === 'production'
           ? process.env.MONGO_URI
           : process.env.MONGO_URI_TEST,
     }),
+    unset: 'destroy',
   }),
 );
 
@@ -137,6 +139,14 @@ app.use(
  * Use the shared library middleware to know who is logged in
  */
 app.use(currentUser);
+
+/**
+ * Initialize Passport and pass the session to session storage of express
+ * Strategies are called in the auth router
+ * and in ./src/services/passport
+ */
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**
  * CORS policy configuration
@@ -190,7 +200,7 @@ app.use('/api/v1/servicename', v1Routes);
  * Everytime you hit a route that doesn't exist it returns a json error 404
  */
 // eslint-disable-next-line no-unused-vars
-app.all('*', (_, res) => {
+app.all('*', (_) => {
   throw new NotFoundError('Resource not found on this server');
 });
 

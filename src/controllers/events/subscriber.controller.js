@@ -40,11 +40,9 @@ export const subscribeToPushEventExample = async (req, res) => {
  */
 /**
  * Example of subscription to pull event
- * @param req
- * @param res
  * @return {Promise<void>}
  */
-export const subscribeToPullEventExample = async (req, res) => {
+export const subscribeToPullEventExample = async () => {
   try {
     // Define some options for subscription
     const subscriberOptions = {
@@ -97,11 +95,23 @@ export const subscribeToPullEventExample = async (req, res) => {
       subscription.removeListener('error', errorHandler);
       console.log(`${messageCount} message(s) received.`);
     }, 60 * 1000);
-
-    // Send a 200 status code
-    res.status(200).send();
   } catch (error) {
     DEBUG(error);
     throw new ApplicationError(500, "Couldn't receive orders object :(", error);
+  }
+};
+
+export const receivePullMessage = async (req, res) => {
+  try {
+    // wait for message to be pulled from pub/sub
+    await subscribeToPullEventExample();
+    // func does not return anything, we can only catch errors
+    res.status(200).json({
+      status: 'success',
+      message: 'Pull event received',
+    });
+  } catch (error) {
+    DEBUG(error);
+    throw new ApplicationError(error.statusCode, error.message);
   }
 };

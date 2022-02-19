@@ -1,9 +1,9 @@
+import { Storage } from '@google-cloud/storage';
+import crypto from 'crypto';
 import fs from 'fs';
 import { format } from 'util';
 import slugify from 'slugify';
 import stream from 'stream';
-import { Storage } from '@google-cloud/storage';
-import crypto from 'crypto';
 
 const storage = new Storage();
 const bucket = storage.bucket(process.env.GOOGLE_STORAGE_BUCKET_NAME);
@@ -157,7 +157,7 @@ export const streamFileToGCS = async (file, directory) => {
  * @returns {Promise<[Response<any>]>}
  * @param blobName
  */
-export const deleteFileFromGcs = async (blobName) => {
+export const deleteFileFromGCS = async (blobName) => {
   try {
     // const name = filename.replace(/ /g, '_');
     return await bucket.file(blobName).delete();

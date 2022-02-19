@@ -53,21 +53,24 @@ export default {
       }
     }
   },
+  /**
+   * Send an email with password reset token
+   * @param email
+   * @param token
+   * @returns {Promise<[Response<object>, {}]>}
+   */
+  sendResetPasswordToken: async (email, token) => {
+    try {
+      MailService.setApiKey(process.env.SENDGRID_API_KEY);
+      const msg = {
+        to: email,
+        from: process.env.SENDGRID_SENDER_EMAIL,
+        subject: 'Password change request',
+        text: `Hello ${email}, we heard you lost your password. You can recover with this token: ${token}`,
+      };
+      return await MailService.send(msg);
+    } catch (error) {
+      throw new ApplicationError(400, error, error.message);
+    }
+  },
 };
-
-// const array = [];
-// const emailList = _.uniq([array[0].model1.email, array[0].model2.email]);
-//
-// const emailData = {
-//   fromEmail: 'mail@mail.com',
-//   toEmail: emailList.shift(), // return the first element of the array
-//   toCCEmails: emailList, // return the cleaned array of email
-//   templateName: 'template_name',
-//   array,
-//   employeeName: array[0].model1.name,
-//   employeeEmail: array[0].model1.email,
-//   clientName: array[0].model2.name,
-//   clientEmail: array[0].model2.email,
-// };
-//
-// const email = await EmailService.sendEmailWithDynamicTemplate(emailData);
