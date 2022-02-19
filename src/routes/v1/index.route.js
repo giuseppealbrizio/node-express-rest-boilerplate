@@ -2,6 +2,8 @@ import express from 'express';
 import _ from 'lodash';
 
 import appRoutes from './app.route';
+import authRoutes from './auth.route';
+import userRoutes from './user.route';
 import publisherRoutes from './events/publisher.route';
 import subscriberRoutes from './events/subscriber.route';
 import swaggerRoutes from './swagger.route';
@@ -20,6 +22,14 @@ const defaultRoutes = [
   {
     path: '/app',
     route: appRoutes,
+  },
+  {
+    path: '/auth',
+    route: authRoutes,
+  },
+  {
+    path: '/users',
+    route: userRoutes,
   },
   {
     path: '/publisher',

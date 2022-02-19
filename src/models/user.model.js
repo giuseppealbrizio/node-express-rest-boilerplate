@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import mongoose, { Schema } from 'mongoose';
 import mongooseDelete from 'mongoose-delete';
 import validator from 'validator';
-import { ApplicationError } from '../errors/old/errors.helper';
+import { ApplicationError } from '../errors';
 import { roles } from '../config/roles.config';
 
 dotenv.config();
@@ -20,7 +20,7 @@ if (!process.env.JWT_KEY) {
 }
 const jwtKey = process.env.JWT_KEY;
 
-const AppSchema = new Schema(
+const UserSchema = new Schema(
   {
     username: {
       type: String,
@@ -29,16 +29,16 @@ const AppSchema = new Schema(
       lowercase: true,
       index: true,
     },
+    fullName: {
+      type: String,
+    },
     email: {
       type: String,
       required: [true, "Email can't be blank"],
       unique: true,
       lowercase: true,
       index: true,
-      validate: {
-        validator: (value) => validator.isEmail(value),
-        message: 'Must be a Valid email',
-      },
+      validate: [validator.isEmail, 'Please provide an email address'],
       match: [/\S+@\S+\.\S+/, 'is invalid'],
       trim: true,
     },
@@ -81,25 +81,28 @@ const AppSchema = new Schema(
         message: 'Must be a Valid URL',
       },
     },
+    pictureBlob: {
+      type: String,
+    },
   },
   {
-    // _id: false,
-    // id: false,
-    timestamps: true,
     toJSON: {
       virtuals: true,
+      getters: true,
     },
     toObject: {
       virtuals: true,
+      getters: true,
     },
+    timestamps: true,
   },
 );
 
-AppSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
+UserSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
 
-AppSchema.index({ username: 1, email: 1, googleId: 1 });
+UserSchema.index({ username: 1, email: 1, googleId: 1 });
 
-AppSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function (next) {
   if (!this.password || !this.isModified('password')) return next;
 
   this.password = await bcrypt.hash(
@@ -109,7 +112,7 @@ AppSchema.pre('save', async function (next) {
   next();
 });
 
-AppSchema.methods.toJSON = function () {
+UserSchema.methods.toJSON = function () {
   const user = this;
 
   const userObj = user.toObject();
@@ -121,40 +124,36 @@ AppSchema.methods.toJSON = function () {
   return userObj;
 };
 
-AppSchema.methods.comparePassword = async function (password) {
+UserSchema.methods.comparePassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-AppSchema.methods.generateVerificationToken = function () {
+UserSchema.methods.generateVerificationToken = function () {
   return jwt.sign(
     {
       id: this._id,
       email: this.email,
-      role: this.role,
       active: this.active,
+      role: this.role,
+      deleted: this.deleted,
     },
     jwtKey,
     {
-      expiresIn: '10d',
+      expiresIn: '1d',
       // algorithm: 'RS256',
     },
   );
 };
 
-AppSchema.methods.generatePasswordResetToken = async function () {
+UserSchema.methods.generatePasswordResetToken = async function () {
   this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
   this.resetPasswordExpires = Date.now() + 3600000; // expires in an hour
 };
 
-AppSchema.statics.checkExistingField = async function (field, value) {
+UserSchema.statics.checkExistingField = async function (field, value) {
   const user = this;
 
   return user.findOne({ [`${field}`]: value });
 };
 
-AppSchema.virtual('fullApp').get(function () {
-  const appProfile = this;
-  return `${appProfile.username} - ${appProfile.email}`;
-});
-
-export default mongoose.model('App', AppSchema, 'apps');
+export default mongoose.model('User', UserSchema, 'users');

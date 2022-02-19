@@ -1,10 +1,10 @@
 const allRoles = {
-  superAdmin: ['*'],
-  admin: [],
-  employee: [],
-  client: [],
-  vendor: [],
-  user: [],
+  superAdmin: ['*', 'getUsers'],
+  admin: ['getUsers'],
+  employee: ['getUsers'],
+  client: ['getUsers'],
+  vendor: ['getUsers'],
+  user: ['getUsers'],
 };
 
 export const roles = Object.keys(allRoles);

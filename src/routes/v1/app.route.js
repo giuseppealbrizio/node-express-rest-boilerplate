@@ -1,19 +1,24 @@
+// Routes created for testing purposes.
 import express from 'express';
 import { requireAuth } from '@skeldon/sdv3-shared-library';
 import appController from '../../controllers/app.controller';
 import catchAsync from '../../middlewares/catchAsync.middleware';
-import { uploadSingleFileToGCS } from '../../middlewares/upload.middleware';
 
-const { getAll, getOne, update, deleteOne } = appController;
+// destructuring controllers and middlewares
+const { checkRouteProtection, checkUserLogged } = appController;
 
+// define router express
 const router = express.Router();
 
-router.route('/').get(requireAuth, uploadSingleFileToGCS, catchAsync(getAll));
+/**
+ * TEST ROUTES
+ */
+router.get(
+  '/test-route-protection',
+  requireAuth,
+  catchAsync(checkRouteProtection),
+);
 
-router
-  .route('/:id')
-  .get(requireAuth, uploadSingleFileToGCS, catchAsync(getOne))
-  .patch(requireAuth, uploadSingleFileToGCS, catchAsync(update))
-  .delete(requireAuth, uploadSingleFileToGCS, catchAsync(deleteOne));
+router.get('/test-check-user-logged', requireAuth, catchAsync(checkUserLogged));
 
 export default router;

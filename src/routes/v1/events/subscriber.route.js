@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  subscribeToPullEventExample,
+  receivePullMessage,
   subscribeToPushEventExample,
 } from '../../../controllers/events/subscriber.controller';
 import catchAsync from '../../../middlewares/catchAsync.middleware';
@@ -18,9 +18,6 @@ router.post(
 /**
  * PULL ROUTES
  */
-router.post(
-  '/receive-pull-sub-message',
-  catchAsync(subscribeToPullEventExample),
-);
+router.post('/receive-pull-sub-message', catchAsync(receivePullMessage));
 
 export default router;

@@ -3,7 +3,6 @@ import { requireAuth } from '@skeldon/sdv3-shared-library';
 import catchAsync from '../../../middlewares/catchAsync.middleware';
 
 import { publishEventExample } from '../../../controllers/events/publisher.controller';
-// import catchAsync from '../../../middlewares/catchAsync.middleware';
 
 const router = express.Router();
 
