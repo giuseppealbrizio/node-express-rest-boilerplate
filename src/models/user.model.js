@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import mongooseDelete from 'mongoose-delete';
 import validator from 'validator';
 import { ApplicationError } from '../errors';
@@ -20,7 +20,7 @@ if (!process.env.JWT_KEY) {
 }
 const jwtKey = process.env.JWT_KEY;
 
-const UserSchema = new Schema(
+const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
