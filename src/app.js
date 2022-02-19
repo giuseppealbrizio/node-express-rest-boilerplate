@@ -185,7 +185,7 @@ app.use((req, res, next) => {
 /**
  * Routes definitions
  */
-app.use('/api/v1/servicename', v1Routes);
+app.use(`/api/v1/${process.env.SERVICE_NAME}`, v1Routes);
 
 /**
  * Catchall middleware. Activate to serve every route in

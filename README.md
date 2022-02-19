@@ -1,4 +1,4 @@
-# Express Microservice Template
+# Node Express Rest Boilerplate
 
 This template is intended to be used as single service in a REST multi-service application using Cloud Pub/Sub as
 message broker
