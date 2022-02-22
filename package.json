@@ -75,7 +75,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mongodb": "^4.4.0",
-    "mongoose": "^6.2.2",
+    "mongoose": "^6.2.3",
     "mongoose-delete": "^0.5.4",
     "mongoose-type-url": "^2.1.0",
     "morgan": "^1.10.0",
@@ -100,7 +100,7 @@
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.3",
+    "@babel/cli": "^7.17.6",
     "@babel/core": "^7.17.5",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
