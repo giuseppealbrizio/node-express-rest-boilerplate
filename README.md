@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/giuseppealbrizio/node-express-rest-boilerplate.svg?branch=main)](https://app.travis-ci.com/giuseppealbrizio/node-express-rest-boilerplate)
+
 # Node Express Rest Boilerplate
 
 This template is intended to be used as single service in a REST multi-service application using Cloud Pub/Sub as
