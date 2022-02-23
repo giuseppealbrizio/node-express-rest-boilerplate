@@ -1,7 +1,7 @@
 {
   "name": "node-express-rest-boilerplate",
   "version": "2.0.0",
-  "description": "Microservice Template",
+  "description": "Node REST microservice boilerplate using node.js and express and some other cool stuff",
   "private": true,
   "license": "MIT",
   "bin": "src/bin/www.js",
@@ -139,11 +139,5 @@
     "nodemon": "^2.0.15",
     "prettier": "2.5.1",
     "rimraf": "^3.0.2"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ]
   }
 }

@@ -15,17 +15,17 @@ const debug = debugLib('ecma6-express:server');
  * Normalize a port into a number, string, or false.
  */
 const normalizePort = (val) => {
-  const port = parseInt(val, 10);
+  const portValue = parseInt(val, 10);
 
   // eslint-disable-next-line no-restricted-globals
-  if (isNaN(port)) {
+  if (isNaN(portValue)) {
     // named pipe
     return val;
   }
 
-  if (port >= 0) {
+  if (portValue >= 0) {
     // port number
-    return port;
+    return portValue;
   }
 
   return false;
@@ -71,9 +71,13 @@ const onError = (error) => {
  * Event listener for HTTP server "listening" event.
  */
 const onListening = () => {
-  const addr = server.address();
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+  const serverAddress = server.address();
+  const bind =
+    typeof serverAddress === 'string'
+      ? `pipe ${serverAddress}`
+      : `port ${serverAddress.port}`;
   debug(`Listening on ${bind}`);
+  console.log(`🚀 Server listening on port ${bind}`);
 };
 
 /**

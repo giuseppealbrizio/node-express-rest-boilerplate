@@ -3,23 +3,23 @@ import mongoose from 'mongoose';
 import { logger } from '../utils/logger.utils';
 
 mongoose.connection.on('connected', () => {
-  console.log('MongoDB Connection Established');
+  console.log('🔥 MongoDB Connection Established');
 });
 
 mongoose.connection.on('reconnected', () => {
-  console.log('MongoDB Connection Reestablished');
+  console.log('🌈 MongoDB Connection Reestablished');
 });
 
 mongoose.connection.on('disconnected', () => {
-  console.log('MongoDB Connection Disconnected');
+  console.log('💀 MongoDB Connection Disconnected');
 });
 
 mongoose.connection.on('close', () => {
-  console.log('MongoDB Connection Closed');
+  console.log('🚪 MongoDB Connection Closed');
 });
 
 mongoose.connection.on('error', (error) => {
-  console.log(`MongoDB ERROR: ${error}`);
+  console.log(`🤦🏻 MongoDB ERROR: ${error}`);
 
   process.exit(1);
 });
