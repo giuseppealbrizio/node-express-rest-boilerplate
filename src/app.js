@@ -7,6 +7,7 @@ import express from 'express';
 import mongoSanitize from 'express-mongo-sanitize';
 import session from 'express-session';
 import helmet from 'helmet';
+import mongoose from 'mongoose';
 import morgan from 'morgan';
 import passport from 'passport';
 import xss from 'xss-clean';
@@ -112,10 +113,23 @@ const DEFAULT_ENV = process.env.NODE_ENV || 'development';
 const COOKIE_MAX_AGE = process.env.COOKIE_MAX_AGE || 1000 * 60 * 60 * 24;
 const SECRET = process.env.JWT_KEY || 'your_jwt_secret';
 
+/**
+ * define a second mongodb connection to store session.
+ * workaround for Jest that crashes when using mongoUrl option
+ */
+const mongoSessionClient =
+  DEFAULT_ENV === 'production'
+    ? mongoose
+        .connect(process.env.MONGO_URI)
+        .then((m) => m.connection.getClient())
+    : mongoose
+        .connect(process.env.MONGO_URI_TEST)
+        .then((m) => m.connection.getClient());
+
 app.use(
   session({
     cookie: {
-      secure: DEFAULT_ENV === 'production',
+      // secure: DEFAULT_ENV === 'production',
       maxAge: COOKIE_MAX_AGE,
       httpOnly: true,
       sameSite: 'lax',
@@ -125,11 +139,10 @@ app.use(
     saveUninitialized: false,
     /* Store session in mongodb */
     store: MongoStore.create({
-      autoRemove: 'native', // Default
-      mongoUrl:
-        process.env.NODE_ENV === 'production'
-          ? process.env.MONGO_URI
-          : process.env.MONGO_URI_TEST,
+      clientPromise: mongoSessionClient,
+      stringify: false,
+      autoRemove: 'interval',
+      autoRemoveInterval: 1,
     }),
     unset: 'destroy',
   }),
