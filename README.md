@@ -39,7 +39,7 @@ The application uses express as framework and is configured with the following f
 
 - App entry point is located in `./src/app.js`
 
-- Server config entrypoint is located in `./src/bin/www.js`
+- Server config entrypoint is located in `./src/bin/server.js`
 
 - Babel config to transpile the code is located at `./.babelrc`
 
@@ -157,7 +157,7 @@ npm run start
 If you have a build and you want to node the build you can run
 
 ```bash
-# This command launch the node instance inside the ./build/bin/www
+# This command launch the node instance inside the ./build/bin/server
 npm run server
 ```
 
