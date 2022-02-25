@@ -30,6 +30,8 @@ spec:
           ports:
             - containerPort: 3000
           env:
+            - name: SERVICE_NAME
+              value: 'your-service-name'
             - name: PORT
               value: '3000'
             - name: HASH

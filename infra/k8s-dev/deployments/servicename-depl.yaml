@@ -27,6 +27,8 @@ spec:
             - name: google-cloud-keys
               mountPath: /var/secrets/google
           env:
+            - name: SERVICE_NAME
+              value: 'your-service-name'
             - name: PORT
               value: '3000'
             - name: HASH

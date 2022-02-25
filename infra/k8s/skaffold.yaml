@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta24
+apiVersion: skaffold/v2beta27
 kind: Config
 metadata:
   name: project-id
