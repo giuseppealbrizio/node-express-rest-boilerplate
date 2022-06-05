@@ -1,4 +1,5 @@
 import { Twilio } from 'twilio';
+import initMB from 'messagebird';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -31,4 +32,47 @@ export const sendWhatsappMessage = async (toNumber) => {
   } catch (error) {
     return error;
   }
+};
+
+/**
+ * Send a whatsapp message through messagebird
+ * @returns {Promise<*>}
+ */
+export const sendWhatsappMessageWithMessagebird = () => {
+  const {
+    MESSAGEBIRD_ACCESS_KEY,
+    MESSAGEBIRD_WHATSAPP_CHANNEL_ID,
+    MESSAGEBIRD_TEMPLATE_NAMESPACE_ID,
+  } = process.env;
+
+  const messagebird = initMB(MESSAGEBIRD_ACCESS_KEY);
+
+  const params = {
+    to: '+31XXXXXXXXXXX',
+    from: MESSAGEBIRD_WHATSAPP_CHANNEL_ID,
+    type: 'hsm',
+    content: {
+      hsm: {
+        namespace: MESSAGEBIRD_TEMPLATE_NAMESPACE_ID,
+        templateName: 'your-template-name',
+        language: {
+          code: 'en',
+        },
+        components: [
+          {
+            type: 'body',
+            parameters: [{ type: 'text', text: 'your-variable' }],
+          },
+        ],
+      },
+    },
+  };
+
+  messagebird.conversations.send(params, (err, response) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(response);
+    }
+  });
 };

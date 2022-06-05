@@ -5,7 +5,8 @@ import appController from '../../controllers/app.controller';
 import catchAsync from '../../middlewares/catchAsync.middleware';
 
 // destructuring controllers and middlewares
-const { checkRouteProtection, checkUserLogged } = appController;
+const { checkRouteProtection, checkUserLogged, sendWhatsappWelcomeMessage } =
+  appController;
 
 // define router express
 const router = express.Router();
@@ -21,4 +22,9 @@ router.get(
 
 router.get('/test-check-user-logged', requireAuth, catchAsync(checkUserLogged));
 
+router.post(
+  '/test-whatsapp-welcome-message',
+  requireAuth,
+  catchAsync(sendWhatsappWelcomeMessage),
+);
 export default router;
