@@ -76,7 +76,7 @@
     "messagebird": "^3.8.0",
     "moment": "^2.29.3",
     "mongodb": "^4.6.0",
-    "mongoose": "^6.3.5",
+    "mongoose": "^6.4.6",
     "mongoose-delete": "^0.5.4",
     "mongoose-type-url": "^2.1.0",
     "morgan": "^1.10.0",
