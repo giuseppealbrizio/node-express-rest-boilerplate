@@ -2,6 +2,7 @@ import { Storage } from '@google-cloud/storage';
 import axios from 'axios';
 import crypto from 'crypto';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import PdfPrinter from 'pdfmake';
 import slugify from 'slugify';
 import stream from 'stream';
 import { format } from 'util';
@@ -112,6 +113,164 @@ export const generatePdfFromBuffer = async (object, directory) => {
       blob.createWriteStream({
         resumable: false,
         public: true,
+      }),
+    );
+
+    blobStream
+      .on('finish', () => {
+        const blobName = blob.name;
+        const publicUrl = format(
+          `https://storage.googleapis.com/${bucket.name}/${blob.name}`,
+        );
+
+        resolve({ publicUrl, blobName });
+      })
+      .on('error', (error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ * *** PDF INVOICES ***
+ * @description here we use a different approach and different library to generate pdf invoices
+ * @description This function generate a pdf from scratch and upload it to storage
+ * @description We use different approach and different library to generate the pdf
+ * @param object
+ * @param directory
+ * @return {Promise<unknown>}
+ */
+export const generateInvoiceWithPdfMake = async (object, directory) => {
+  // company logo
+  const COMPANY_LOGO =
+    'https://storage.googleapis.com/storage-url/logo-default-site.png';
+
+  // company name
+  const COMPANY_NAME = 'Company Name';
+
+  // service name folder
+  const SERVICE_FOLDER = 'service-folder-name';
+
+  // convert image to array buffer
+  const logoImageUrl = await axios
+    .get(COMPANY_LOGO, { responseType: 'arraybuffer' })
+    .then((res) => res.data);
+
+  // return the array buffer for pdfmake
+  const logoImageBase64 = `data:image/png;base64,${Buffer.from(
+    logoImageUrl,
+  ).toString('base64')}`;
+
+  // fonts default definition
+  const fonts = {
+    Courier: {
+      normal: 'Courier',
+      bold: 'Courier-Bold',
+      italics: 'Courier-Oblique',
+      bolditalics: 'Courier-BoldOblique',
+    },
+    Helvetica: {
+      normal: 'Helvetica',
+      bold: 'Helvetica-Bold',
+      italics: 'Helvetica-Oblique',
+      bolditalics: 'Helvetica-BoldOblique',
+    },
+    Times: {
+      normal: 'Times-Roman',
+      bold: 'Times-Bold',
+      italics: 'Times-Italic',
+      bolditalics: 'Times-BoldItalic',
+    },
+    Symbol: {
+      normal: 'Symbol',
+    },
+    ZapfDingbats: {
+      normal: 'ZapfDingbats',
+    },
+  };
+
+  // set a general font size
+  const fontSize = 12;
+
+  // instantiate PDFMake
+  const printer = new PdfPrinter(fonts);
+
+  const docDefinition = {
+    info: {
+      title: 'Title',
+      author: 'Author',
+      subject: 'Subject',
+      keywords: 'Keywords',
+    },
+    header: (currentPage, pageCount, pageSize) => {
+      // you can apply any logic and return any valid pdfmake element
+      return [
+        {
+          text: 'Header',
+          alignment: currentPage % 2 ? 'right' : 'left',
+          fontSize: fontSize - 4,
+          lineHeight: 1.2,
+          margin: [20, 20, 30, 20],
+        },
+        {
+          canvas: [
+            { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 },
+          ],
+        },
+      ];
+    },
+    footer: (currentPage, pageCount, pageSize) => {
+      // you can apply any logic and return any valid pdfmake element
+      return [
+        {
+          text: 'Footer - Page ',
+          alignment: 'center',
+          fontSize: fontSize - 6,
+          lineHeight: 1.2,
+          margin: [10, 10, 10, 10],
+        },
+        {
+          canvas: [
+            { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 },
+          ],
+        },
+      ];
+    },
+    content: [
+      {
+        image: logoImageBase64,
+        width: 150,
+      },
+      {
+        text: 'Some Text',
+        fontSize: fontSize - 4,
+      },
+    ],
+    defaultStyle: {
+      font: 'Helvetica',
+    },
+  };
+
+  // This produce a stream already, so we don't need to create a new one
+  const pdfBuffer = await printer.createPdfKitDocument(docDefinition);
+  pdfBuffer.end();
+
+  const fileName = `Filename_ ${COMPANY_NAME.replace(/ /g, '_')}.pdf`;
+
+  // FINALLY, RETURN THE PROMISE PASSING THE STREAM AND THE FILENAME
+  return new Promise((resolve, reject) => {
+    const blob = bucket.file(
+      `${SERVICE_FOLDER}/${directory}/${slugify(fileName)}`,
+    );
+
+    const blobStream = pdfBuffer.pipe(
+      blob.createWriteStream({
+        resumable: false,
+        public: true,
+        metadata: {
+          contentType: 'application/pdf',
+          cacheControl: 'no-store',
+        },
       }),
     );
 
