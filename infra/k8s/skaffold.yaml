@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta27
+apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
   name: project-id
@@ -26,7 +26,8 @@ build:
   #Cloud configuration
   googleCloudBuild:
     projectId: project-id
+manifests:
+  rawYaml:
+    - ./infra/k8s/*
 deploy:
-  kubectl:
-    manifests:
-      - ./infra/k8s/* #Where all the k8s for files are located at the top of project
+  kubectl: {}

@@ -84,6 +84,14 @@ const UserSchema = new mongoose.Schema(
     pictureBlob: {
       type: String,
     },
+    notification: {
+      fcmPermission: {
+        type: String,
+        enum: ['granted', 'denied', 'default'],
+        default: 'default',
+      },
+      firebaseMessageToken: { type: String, trim: true, default: null },
+    },
   },
   {
     toJSON: {

@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import mongoSanitize from 'express-mongo-sanitize';
 import session from 'express-session';
+import { applicationDefault, initializeApp } from 'firebase-admin/app';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
@@ -39,6 +40,11 @@ import errorHandler from './middlewares/errorHandler.middleware';
 import v1Routes from './routes/v1/index.route';
 
 /**
+ * Import all cron jobs
+ */
+import './jobs';
+
+/**
  * Global env variables definition
  */
 dotenv.config();
@@ -52,6 +58,10 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   mongoDbConfig.MongoDBTest().catch((err) => console.log(err));
 }
+
+initializeApp({
+  credential: applicationDefault(),
+});
 
 /**
  * Define App
