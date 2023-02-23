@@ -94,7 +94,7 @@
     "pdf-lib": "^1.17.1",
     "pdfmake": "^0.2.7",
     "regenerator-runtime": "^0.13.11",
-    "sequelize": "^6.26.0",
+    "sequelize": "^6.28.2",
     "slugify": "^1.6.5",
     "sparkpost": "^2.1.4",
     "supertest": "^6.3.1",
